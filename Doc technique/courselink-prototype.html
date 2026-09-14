@@ -1,0 +1,1176 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>CourseLink — Plateforme associative scolaire</title>
+  <style>
+    :root {
+      --bg: #F4F3EE;
+      --surface: #ffffff;
+      --fg: #1A1917;
+      --muted: #6B6966;
+      --border: rgba(0,0,0,0.08);
+      --accent: #EA580C;
+      --sidebar: #14126A;
+      --sidebar-text: #ffffff;
+      --indigo: #3730A3;
+      --indigo-soft: #EEEDF0;
+      --accent-soft: color-mix(in oklch, var(--accent) 14%, transparent);
+      --fg-soft: color-mix(in oklch, var(--fg) 6%, transparent);
+
+      --font-display: 'Iowan Old Style', 'Charter', Georgia, 'Times New Roman', serif;
+      --font-body: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+      --font-mono: ui-monospace, 'JetBrains Mono', 'SF Mono', Menlo, monospace;
+
+      --fs-h1: clamp(32px, 4vw, 48px);
+      --fs-h2: clamp(24px, 3vw, 32px);
+      --fs-h3: 18px;
+      --fs-body: 15px;
+      --fs-meta: 13px;
+      --fs-sm: 12px;
+
+      --gap-xs: 8px;
+      --gap-sm: 12px;
+      --gap-md: 20px;
+      --gap-lg: 32px;
+      --radius: 10px;
+      --radius-lg: 16px;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; }
+    html { -webkit-text-size-adjust: 100%; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--fg);
+      font-family: var(--font-body);
+      font-size: var(--fs-body);
+      line-height: 1.55;
+      text-rendering: optimizeLegibility;
+      -webkit-font-smoothing: antialiased;
+    }
+    img, svg { display: block; max-width: 100%; }
+    a { color: inherit; text-decoration: none; }
+    button { font: inherit; cursor: pointer; }
+    p { text-wrap: pretty; }
+    h1, h2, h3, h4 { text-wrap: balance; margin: 0; }
+
+    .container { max-width: 1120px; margin-inline: auto; padding-inline: 32px; }
+    .eyebrow {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin: 0 0 var(--gap-md);
+    }
+    .btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 11px 20px;
+      border-radius: var(--radius);
+      border: 1px solid transparent;
+      font-size: 15px; font-weight: 500;
+      transition: transform 0.05s ease, background 0.15s ease;
+    }
+    .btn:active { transform: translateY(1px); }
+    .btn-primary { background: var(--accent); color: var(--surface); }
+    .btn-primary:hover { background: color-mix(in oklch, var(--accent) 88%, black); }
+    .btn-secondary { background: transparent; color: var(--fg); border-color: var(--border); }
+    .btn-secondary:hover { border-color: var(--fg); }
+    .btn-ghost { background: transparent; color: var(--fg); border-color: transparent; padding-inline: 8px; }
+    .btn-ghost:hover { color: var(--accent); }
+    .btn-sm { padding: 7px 14px; font-size: 13px; border-radius: 8px; }
+    .btn-indigo { background: var(--indigo); color: #fff; }
+    .btn-indigo:hover { background: color-mix(in oklch, var(--indigo) 88%, black); }
+    .btn-emerald { background: #059669; color: #fff; }
+    .btn-emerald:hover { background: #047857; }
+    .btn-outline-indigo { background: transparent; color: var(--indigo); border-color: var(--indigo); }
+    .btn-outline-indigo:hover { background: #EEEDF0; }
+    .btn-outline-amber { background: #FEF3C7; color: #92400E; border-color: #FCD34D; }
+    .btn-outline-amber:hover { background: #FDE68A; }
+    .btn-danger-ghost { background: transparent; color: var(--muted); border-color: var(--border); }
+    .btn-danger-ghost:hover { background: #FEF2F2; color: #DC2626; border-color: #FECACA; }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 24px;
+    }
+    .field { display: flex; flex-direction: column; gap: 6px; }
+    .field label {
+      font-family: var(--font-mono);
+      font-size: 10px; font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--fg);
+    }
+    .input, .textarea {
+      width: 100%;
+      padding: 11px 14px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: var(--bg);
+      color: var(--fg);
+      font: inherit;
+      font-size: 15px;
+    }
+    .input::placeholder { color: #9B9895; }
+    .input:focus, .textarea:focus {
+      outline: none;
+      border-color: var(--indigo);
+      box-shadow: 0 0 0 3px color-mix(in oklch, var(--indigo) 15%, transparent);
+    }
+    .textarea { min-height: 96px; resize: vertical; line-height: 1.55; }
+
+    .pill {
+      display: inline-flex; align-items: center; gap: 5px;
+      padding: 3px 10px;
+      border-radius: 999px;
+      font-family: var(--font-mono);
+      font-size: 11px; font-weight: 600;
+    }
+    .pill-pending { background: #FEF3C7; color: #92400E; border: 1px solid #FCD34D; }
+    .pill-open { background: #FEE2E2; color: #991B1B; border: 1px solid #FECACA; }
+    .pill-success { background: #D1FAE5; color: #065F46; border: 1px solid #6EE7B7; }
+    .pill-info { background: #E0E7FF; color: #3730A3; border: 1px solid #A5B4FC; }
+    .pill-neutral { background: #F4F3EE; color: #6B6966; border: 1px solid #E8E5DF; }
+
+    .dot-row { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
+    .dot { width: 10px; height: 10px; border-radius: 50%; }
+    .dot-present { background: #34D399; }
+    .dot-absent { background: #F87171; }
+    .dot-late { background: #FBBF24; }
+
+    .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); border: 0; }
+
+    /* ── Screens ── */
+    .screen { display: none; }
+    .screen.active { display: block; }
+
+    /* ── Login ── */
+    .login-screen { min-height: 100vh; display: flex; }
+    .login-left {
+      display: none;
+      width: 45%;
+      background: var(--sidebar);
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 48px;
+      position: relative;
+      overflow: hidden;
+    }
+    @media (min-width: 1024px) { .login-left { display: flex; } }
+    .login-left .circle-1 {
+      position: absolute; top: -80px; right: -80px;
+      width: 260px; height: 260px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.03);
+    }
+    .login-left .circle-2 {
+      position: absolute; bottom: 80px; left: -60px;
+      width: 180px; height: 180px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.03);
+    }
+    .login-right {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 32px;
+    }
+    .login-form-wrap { width: 100%; max-width: 420px; }
+    .login-mobile-logo {
+      display: flex; align-items: center; gap: 10px;
+      margin-bottom: 40px;
+    }
+    @media (min-width: 1024px) { .login-mobile-logo { display: none; } }
+    .login-logo-icon {
+      width: 36px; height: 36px;
+      background: var(--sidebar);
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      color: #fff;
+    }
+    .login-logo-icon svg { width: 20px; height: 20px; }
+    .login-logo-text {
+      font-family: var(--font-display);
+      font-size: 20px; font-weight: 700;
+    }
+    .mode-toggle {
+      display: flex;
+      background: var(--surface);
+      border-radius: var(--radius-lg);
+      padding: 4px;
+      margin-bottom: 32px;
+      border: 1px solid var(--border);
+      box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+    }
+    .mode-toggle button {
+      flex: 1;
+      padding: 10px;
+      border-radius: 12px;
+      border: none;
+      font-size: 14px; font-weight: 600;
+      background: transparent;
+      color: var(--muted);
+      transition: all 0.15s;
+    }
+    .mode-toggle button.active {
+      background: var(--sidebar);
+      color: #fff;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.15);
+    }
+    .demo-picker {
+      background: var(--bg);
+      border-radius: var(--radius);
+      padding: 16px;
+      margin-top: 16px;
+    }
+    .demo-picker p {
+      font-family: var(--font-mono);
+      font-size: 10px; font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--muted);
+      margin: 0 0 12px;
+    }
+    .demo-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+    .demo-grid button {
+      padding: 8px 12px;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      font-size: 12px; font-weight: 600;
+      color: var(--muted);
+      transition: all 0.15s;
+    }
+    .demo-grid button.active {
+      background: var(--sidebar);
+      color: #fff;
+      border-color: var(--sidebar);
+    }
+    .demo-grid button:not(.active):hover {
+      color: var(--fg);
+      border-color: var(--fg);
+    }
+
+    /* ── App Shell ── */
+    .app-shell { display: flex; height: 100vh; overflow: hidden; }
+    .sidebar {
+      width: 240px;
+      background: var(--sidebar);
+      display: flex;
+      flex-direction: column;
+      flex-shrink: 0;
+    }
+    .sidebar-logo {
+      display: flex; align-items: center; gap: 10px;
+      padding: 24px 20px 20px;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+    }
+    .sidebar-logo-icon {
+      width: 32px; height: 32px;
+      background: rgba(255,255,255,0.1);
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      color: #fff;
+    }
+    .sidebar-logo-icon svg { width: 18px; height: 18px; }
+    .sidebar-logo-text {
+      font-family: var(--font-display);
+      font-size: 18px; font-weight: 700;
+      color: #fff;
+    }
+    .sidebar-user {
+      padding: 16px 20px;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+    }
+    .sidebar-user-row { display: flex; align-items: center; gap: 12px; }
+    .avatar {
+      width: 36px; height: 36px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 12px; font-weight: 700;
+      flex-shrink: 0;
+    }
+    .sidebar-user-name { font-size: 14px; font-weight: 600; color: #fff; }
+    .sidebar-user-sub { font-size: 12px; color: rgba(255,255,255,0.45); }
+    .sidebar-nav { flex: 1; padding: 16px 12px; display: flex; flex-direction: column; gap: 2px; }
+    .nav-item {
+      display: flex; align-items: center; gap: 12px;
+      padding: 10px 12px;
+      border-radius: 10px;
+      border: none;
+      background: transparent;
+      font-size: 14px; font-weight: 500;
+      color: rgba(255,255,255,0.5);
+      transition: all 0.15s;
+      width: 100%;
+      text-align: left;
+    }
+    .nav-item:hover { color: rgba(255,255,255,0.8); background: rgba(255,255,255,0.05); }
+    .nav-item.active { color: #fff; background: rgba(255,255,255,0.1); }
+    .nav-item svg { width: 16px; height: 16px; flex-shrink: 0; }
+    .sidebar-demo {
+      padding: 12px;
+      border-top: 1px solid rgba(255,255,255,0.1);
+    }
+    .sidebar-demo-label {
+      font-family: var(--font-mono);
+      font-size: 9px; font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: rgba(255,255,255,0.3);
+      padding: 0 12px 8px;
+    }
+    .sidebar-logout {
+      padding: 12px;
+      border-top: 1px solid rgba(255,255,255,0.1);
+    }
+    .sidebar-logout button {
+      display: flex; align-items: center; gap: 12px;
+      width: 100%;
+      padding: 10px 12px;
+      border-radius: 10px;
+      border: none;
+      background: transparent;
+      font-size: 14px; font-weight: 500;
+      color: rgba(255,255,255,0.35);
+      transition: all 0.15s;
+    }
+    .sidebar-logout button:hover { color: rgba(255,255,255,0.6); background: rgba(255,255,255,0.05); }
+    .sidebar-logout button svg { width: 16px; height: 16px; }
+
+    .main-area { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+    .topbar {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      padding: 16px 32px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-shrink: 0;
+    }
+    .topbar-breadcrumb { display: flex; align-items: center; gap: 8px; font-size: 14px; color: var(--muted); }
+    .topbar-breadcrumb span:last-child { font-weight: 600; color: var(--fg); }
+    .topbar-right { display: flex; align-items: center; gap: 16px; }
+    .notif-btn {
+      position: relative;
+      background: none; border: none;
+      color: var(--muted);
+      padding: 4px;
+      transition: color 0.15s;
+    }
+    .notif-btn:hover { color: var(--fg); }
+    .notif-btn svg { width: 20px; height: 20px; }
+    .notif-badge {
+      position: absolute; top: -2px; right: -4px;
+      width: 16px; height: 16px;
+      background: var(--accent);
+      color: #fff;
+      font-size: 9px; font-weight: 700;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .topbar-avatar {
+      width: 32px; height: 32px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 11px; font-weight: 700;
+    }
+    .content-area { flex: 1; overflow: auto; }
+    .content-inner { max-width: 768px; margin: 0 auto; padding: 32px; }
+
+    /* ── Section titles ── */
+    .section-label {
+      font-family: var(--font-mono);
+      font-size: 10px; font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--muted);
+      margin: 0 0 12px;
+    }
+
+    /* ── Course card ── */
+    .course-card { padding: 20px; }
+    .course-card + .course-card { margin-top: 12px; }
+    .course-header { display: flex; align-items: flex-start; gap: 16px; }
+    .course-icon {
+      width: 40px; height: 40px;
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .course-icon svg { width: 20px; height: 20px; }
+    .course-icon-indigo { background: #E0E7FF; color: #4338CA; }
+    .course-icon-violet { background: #EDE9FE; color: #7C3AED; }
+    .course-name { font-size: 14px; font-weight: 600; color: var(--fg); }
+    .course-meta { font-size: 12px; color: var(--muted); margin-top: 2px; }
+    .course-time { display: flex; align-items: center; gap: 6px; margin-top: 8px; font-size: 12px; color: var(--muted); }
+    .course-time svg { width: 14px; height: 14px; color: #9B9895; }
+    .course-actions {
+      display: flex; gap: 8px; flex-wrap: wrap;
+      padding-top: 16px; margin-top: 16px;
+      border-top: 1px solid var(--border);
+    }
+
+    /* ── List rows ── */
+    .list-row {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 16px 20px;
+      gap: 16px;
+    }
+    .list-row + .list-row { border-top: 1px solid var(--border); }
+    .list-row-info { min-width: 0; }
+    .list-row-name { font-size: 14px; font-weight: 600; color: var(--fg); }
+    .list-row-sub { font-size: 12px; color: var(--muted); margin-top: 2px; }
+    .list-row-actions { display: flex; gap: 8px; flex-shrink: 0; align-items: center; }
+
+    /* ── Stats grid ── */
+    .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+    @media (max-width: 768px) { .stats-grid { grid-template-columns: repeat(2, 1fr); } }
+    .stat-card { padding: 20px; }
+    .stat-value {
+      font-family: var(--font-display);
+      font-size: 28px; font-weight: 700;
+      line-height: 1;
+    }
+    .stat-label { font-size: 12px; color: var(--muted); margin-top: 6px; }
+
+    /* ── Tabs ── */
+    .tab-row { display: flex; gap: 8px; margin-bottom: 24px; }
+    .tab-btn {
+      padding: 10px 20px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      font-size: 14px; font-weight: 600;
+      color: var(--muted);
+      transition: all 0.15s;
+    }
+    .tab-btn.active {
+      background: var(--sidebar);
+      color: #fff;
+      border-color: var(--sidebar);
+    }
+    .tab-btn:not(.active):hover { color: var(--fg); border-color: var(--fg); }
+    .tab-level { font-weight: 400; font-size: 12px; margin-left: 8px; }
+
+    /* ── Two-column cards ── */
+    .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    @media (max-width: 768px) { .two-col { grid-template-columns: 1fr; } }
+
+    /* ── Progression card ── */
+    .progression-note { font-size: 14px; color: #4B4A47; line-height: 1.6; margin-top: 8px; }
+
+    /* ── Messaging textarea ── */
+    .msg-textarea {
+      width: 100%;
+      padding: 11px 14px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: var(--bg);
+      color: var(--fg);
+      font: inherit;
+      font-size: 14px;
+      resize: vertical;
+      min-height: 80px;
+      line-height: 1.55;
+    }
+    .msg-textarea::placeholder { color: #9B9895; }
+    .msg-textarea:focus {
+      outline: none;
+      border-color: var(--indigo);
+      box-shadow: 0 0 0 3px color-mix(in oklch, var(--indigo) 15%, transparent);
+    }
+
+    /* ── Empty state ── */
+    .empty-state {
+      padding: 32px;
+      text-align: center;
+    }
+    .empty-icon {
+      width: 40px; height: 40px;
+      background: #D1FAE5;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 12px;
+    }
+    .empty-icon svg { width: 20px; height: 20px; color: #059669; }
+
+    /* ── Mobile ── */
+    @media (max-width: 920px) {
+      .sidebar { display: none; }
+      .topbar { padding: 16px 20px; }
+      .content-inner { padding: 20px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════════════════════════════ -->
+<!-- SCREEN 1 — LOGIN / REGISTER                                          -->
+<!-- ═══════════════════════════════════════════════════════════════════════ -->
+<div class="screen active" id="screen-login">
+  <div class="login-screen">
+    <div class="login-left">
+      <div class="circle-1"></div>
+      <div class="circle-2"></div>
+      <div style="position:relative;z-index:1;">
+        <div style="display:flex;align-items:center;gap:10px;">
+          <div class="login-logo-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg></div>
+          <span class="sidebar-logo-text">CourseLink</span>
+        </div>
+      </div>
+      <div style="position:relative;z-index:1;">
+        <p class="eyebrow" style="color:rgba(255,255,255,0.4);">Plateforme associative scolaire</p>
+        <h1 style="font-family:var(--font-display);font-size:clamp(28px,4vw,40px);color:#fff;line-height:1.2;margin-bottom:20px;">
+          L'apprentissage,<br>réinventé pour<br>votre association.
+        </h1>
+        <p style="color:rgba(255,255,255,0.55);font-size:14px;line-height:1.6;max-width:320px;">
+          Gérez les cours, suivez la progression des élèves et facilitez la communication entre enseignants, parents et administration.
+        </p>
+      </div>
+      <div style="position:relative;z-index:1;display:flex;gap:40px;">
+        <div><div style="font-family:var(--font-display);font-size:28px;color:#fff;">12</div><div style="color:rgba(255,255,255,0.4);font-size:12px;margin-top:4px;">Enseignants</div></div>
+        <div><div style="font-family:var(--font-display);font-size:28px;color:#fff;">148</div><div style="color:rgba(255,255,255,0.4);font-size:12px;margin-top:4px;">Élèves</div></div>
+        <div><div style="font-family:var(--font-display);font-size:28px;color:#fff;">32</div><div style="color:rgba(255,255,255,0.4);font-size:12px;margin-top:4px;">Cours actifs</div></div>
+      </div>
+    </div>
+
+    <div class="login-right">
+      <div class="login-form-wrap">
+        <div class="login-mobile-logo">
+          <div class="login-logo-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg></div>
+          <span class="login-logo-text">CourseLink</span>
+        </div>
+
+        <div class="mode-toggle">
+          <button class="active" onclick="switchMode('login',this)">Connexion</button>
+          <button onclick="switchMode('register',this)">Inscription</button>
+        </div>
+
+        <div class="card" style="padding:32px;">
+          <!-- Login form -->
+          <div id="form-login">
+            <div style="margin-bottom:24px;">
+              <h2 style="font-family:var(--font-display);font-size:24px;font-weight:700;">Bon retour</h2>
+              <p style="font-size:14px;color:var(--muted);margin-top:4px;">Connectez-vous à votre espace</p>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:12px;margin-bottom:20px;">
+              <div class="field"><label>Email</label><input class="input" type="email" placeholder="prenom@email.fr" /></div>
+              <div class="field"><label>Mot de passe</label><input class="input" type="password" placeholder="••••••••" /></div>
+            </div>
+            <div class="demo-picker">
+              <p>Démo — choisir un profil</p>
+              <div class="demo-grid">
+                <button class="active" onclick="pickDemoRole('student',this)">Élève</button>
+                <button onclick="pickDemoRole('parent',this)">Parent</button>
+                <button onclick="pickDemoRole('teacher',this)">Professeur</button>
+                <button onclick="pickDemoRole('admin',this)">Administration</button>
+              </div>
+            </div>
+            <button class="btn btn-primary" style="width:100%;justify-content:center;margin-top:20px;padding:14px;" onclick="doLogin()">Se connecter →</button>
+          </div>
+
+          <!-- Register form -->
+          <div id="form-register" style="display:none;">
+            <div style="margin-bottom:24px;">
+              <h2 style="font-family:var(--font-display);font-size:24px;font-weight:700;">Créer un compte</h2>
+              <p style="font-size:14px;color:var(--muted);margin-top:4px;">Rejoignez la plateforme</p>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:12px;">
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+                <div class="field"><label>Prénom</label><input class="input" placeholder="Marie" /></div>
+                <div class="field"><label>Nom</label><input class="input" placeholder="Dupont" /></div>
+              </div>
+              <div class="field"><label>Email</label><input class="input" type="email" placeholder="prenom@email.fr" /></div>
+              <div class="field">
+                <label>Rôle</label>
+                <div style="display:flex;gap:8px;">
+                  <button class="btn btn-sm" style="flex:1;border-color:var(--indigo);background:#E0E7FF;color:var(--indigo);" id="reg-role-student" onclick="pickRegRole('student')">Élève</button>
+                  <button class="btn btn-sm" style="flex:1;background:var(--bg);border-color:var(--border);color:var(--muted);" id="reg-role-parent" onclick="pickRegRole('parent')">Parent</button>
+                </div>
+              </div>
+              <div id="reg-dob-field" class="field"><label>Date de naissance</label><input class="input" type="date" /></div>
+              <div class="field"><label>Mot de passe</label><input class="input" type="password" placeholder="••••••••" /></div>
+            </div>
+            <button class="btn btn-primary" style="width:100%;justify-content:center;margin-top:20px;padding:14px;" onclick="doLogin()">S'inscrire →</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════════════ -->
+<!-- SCREEN 2-5 — APP SHELL                                               -->
+<!-- ═══════════════════════════════════════════════════════════════════════ -->
+<div class="screen" id="screen-app">
+  <div class="app-shell">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-logo">
+        <div class="sidebar-logo-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg></div>
+        <span class="sidebar-logo-text">CourseLink</span>
+      </div>
+      <div class="sidebar-user">
+        <div class="sidebar-user-row">
+          <div class="avatar" id="sidebar-avatar">LB</div>
+          <div>
+            <div class="sidebar-user-name" id="sidebar-name">Lucas Bernard</div>
+            <div class="sidebar-user-sub" id="sidebar-sub">3ème · Groupe A</div>
+          </div>
+        </div>
+      </div>
+      <nav class="sidebar-nav" id="sidebar-nav"></nav>
+      <div class="sidebar-demo">
+        <div class="sidebar-demo-label">Démo — changer de profil</div>
+        <div id="sidebar-role-switch"></div>
+      </div>
+      <div class="sidebar-logout">
+        <button onclick="goToLogin()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+          Se déconnecter
+        </button>
+      </div>
+    </aside>
+
+    <!-- Main -->
+    <div class="main-area">
+      <header class="topbar">
+        <div class="topbar-breadcrumb">
+          <span>CourseLink</span>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+          <span id="topbar-page">Mon agenda</span>
+        </div>
+        <div class="topbar-right">
+          <button class="notif-btn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>
+            <span class="notif-badge">3</span>
+          </button>
+          <div class="topbar-avatar" id="topbar-avatar">LB</div>
+        </div>
+      </header>
+      <div class="content-area">
+        <!-- Student -->
+        <div class="content-inner" id="panel-student" style="display:none;">
+          <div style="margin-bottom:28px;">
+            <h1 style="font-family:var(--font-display);font-size:28px;font-weight:700;">Mon agenda</h1>
+            <p style="font-size:14px;color:var(--muted);margin-top:4px;">Prochaines sessions inscrites</p>
+          </div>
+          <div style="margin-bottom:28px;">
+            <div class="card course-card">
+              <div class="course-header">
+                <div class="course-icon course-icon-indigo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg></div>
+                <div>
+                  <div class="course-name">Mathématiques</div>
+                  <div class="course-meta">Prof. Dubois</div>
+                  <div class="course-time">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                    Samedi · 10:00 – 11:00
+                  </div>
+                </div>
+              </div>
+              <div class="course-actions">
+                <button class="btn btn-primary btn-sm" onclick="event.stopPropagation()">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                  Rejoindre
+                </button>
+              </div>
+            </div>
+            <div class="card course-card">
+              <div class="course-header">
+                <div class="course-icon course-icon-violet"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg></div>
+                <div>
+                  <div class="course-name">Anglais</div>
+                  <div class="course-meta">Prof. Martin</div>
+                  <div class="course-time">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                    Dimanche · 14:00 – 15:00
+                  </div>
+                </div>
+              </div>
+              <div class="course-actions">
+                <button class="btn btn-primary btn-sm">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                  Rejoindre
+                </button>
+              </div>
+            </div>
+          </div>
+          <p class="section-label">Cours disponibles</p>
+          <div class="card" style="padding:0;">
+            <div class="list-row">
+              <div class="list-row-info">
+                <div class="list-row-name">Physique-Chimie</div>
+                <div class="list-row-sub">Prof. Lefèvre · Sam 11:00</div>
+              </div>
+              <div class="list-row-actions">
+                <span style="font-size:12px;color:#9B9895;">3 places</span>
+                <button class="btn btn-outline-indigo btn-sm">Demander</button>
+              </div>
+            </div>
+            <div class="list-row">
+              <div class="list-row-info">
+                <div class="list-row-name">Histoire-Géo</div>
+                <div class="list-row-sub">Prof. Morel · Dim 10:00</div>
+              </div>
+              <div class="list-row-actions">
+                <span style="font-size:12px;color:#9B9895;">7 places</span>
+                <button class="btn btn-outline-indigo btn-sm">Demander</button>
+              </div>
+            </div>
+            <div class="list-row">
+              <div class="list-row-info">
+                <div class="list-row-name">Français</div>
+                <div class="list-row-sub">Prof. Petit · Sam 14:00</div>
+              </div>
+              <div class="list-row-actions">
+                <span style="font-size:12px;color:#9B9895;">1 place</span>
+                <button class="btn btn-outline-indigo btn-sm">Demander</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Parent -->
+        <div class="content-inner" id="panel-parent" style="display:none;">
+          <div style="margin-bottom:24px;">
+            <h1 style="font-family:var(--font-display);font-size:28px;font-weight:700;">Mes enfants</h1>
+            <p style="font-size:14px;color:var(--muted);margin-top:4px;">Suivi et progression</p>
+          </div>
+          <div class="tab-row" id="parent-tabs">
+            <button class="tab-btn active" onclick="switchChild(0,this)">Lucas<span class="tab-level">3ème</span></button>
+            <button class="tab-btn" onclick="switchChild(1,this)">Emma<span class="tab-level">5ème</span></button>
+          </div>
+          <div class="two-col" style="margin-bottom:16px;">
+            <div class="card">
+              <p class="section-label">Agenda</p>
+              <div id="parent-agenda"></div>
+            </div>
+            <div class="card">
+              <p class="section-label">Assiduité</p>
+              <div id="parent-attendance"></div>
+              <div class="dot-row" style="margin-top:12px;">
+                <span style="display:flex;align-items:center;gap:6px;font-size:12px;color:var(--muted);"><span class="dot dot-present"></span>Présent</span>
+                <span style="display:flex;align-items:center;gap:6px;font-size:12px;color:var(--muted);"><span class="dot dot-late"></span>Retard</span>
+                <span style="display:flex;align-items:center;gap:6px;font-size:12px;color:var(--muted);"><span class="dot dot-absent"></span>Absent</span>
+              </div>
+            </div>
+          </div>
+          <div class="card" style="margin-bottom:16px;">
+            <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:16px;">
+              <div>
+                <p class="section-label">Progression</p>
+                <div id="parent-level" style="margin-bottom:10px;"></div>
+                <p class="progression-note" id="parent-note"></p>
+              </div>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="2" style="flex-shrink:0;margin-top:4px;"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
+            </div>
+          </div>
+          <button class="btn btn-outline-amber" style="width:100%;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+            Signaler une absence ou un retard
+          </button>
+        </div>
+
+        <!-- Teacher -->
+        <div class="content-inner" id="panel-teacher" style="display:none;">
+          <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:16px;margin-bottom:28px;">
+            <div>
+              <h1 style="font-family:var(--font-display);font-size:28px;font-weight:700;">Mes cours</h1>
+              <p style="font-size:14px;color:var(--muted);margin-top:4px;">Gestion et suivi des élèves</p>
+            </div>
+            <button class="btn btn-primary btn-sm">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              Créer un cours
+            </button>
+          </div>
+          <div class="card course-card" style="margin-bottom:16px;">
+            <div class="course-header">
+              <div class="course-icon course-icon-indigo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg></div>
+              <div>
+                <div class="course-name">Mathématiques</div>
+                <div class="course-meta">Samedi 10:00 – 11:00</div>
+                <div style="display:flex;align-items:center;gap:12px;margin-top:8px;flex-wrap:wrap;">
+                  <span style="font-size:12px;color:var(--muted);"><strong style="color:var(--fg);">8</strong> élèves inscrits</span>
+                  <span class="pill pill-info"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg> Zoom configuré</span>
+                </div>
+              </div>
+            </div>
+            <div class="course-actions">
+              <button class="btn btn-sm" style="background:var(--bg);border-color:var(--border);color:var(--fg);">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+                Assiduité
+              </button>
+              <button class="btn btn-sm" style="background:var(--bg);border-color:var(--border);color:var(--fg);">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
+                Progression
+              </button>
+              <button class="btn btn-outline-indigo btn-sm">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                Nouvelle session
+              </button>
+            </div>
+          </div>
+          <div class="card course-card">
+            <div class="course-header">
+              <div class="course-icon course-icon-violet"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg></div>
+              <div>
+                <div class="course-name">Physique-Chimie</div>
+                <div class="course-meta">Samedi 11:00 – 12:00</div>
+                <div style="margin-top:8px;">
+                  <span style="font-size:12px;color:var(--muted);"><strong style="color:var(--fg);">5</strong> élèves inscrits</span>
+                </div>
+              </div>
+            </div>
+            <div class="course-actions">
+              <button class="btn btn-sm" style="background:var(--bg);border-color:var(--border);color:var(--fg);">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+                Assiduité
+              </button>
+              <button class="btn btn-sm" style="background:var(--bg);border-color:var(--border);color:var(--fg);">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
+                Progression
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Admin -->
+        <div class="content-inner" id="panel-admin" style="display:none;">
+          <div style="margin-bottom:28px;">
+            <h1 style="font-family:var(--font-display);font-size:28px;font-weight:700;">Administration</h1>
+            <p style="font-size:14px;color:var(--muted);margin-top:4px;">Validation, comptes, signalements, messagerie</p>
+          </div>
+          <div class="stats-grid" style="margin-bottom:28px;">
+            <div class="card stat-card"><div class="stat-value" style="color:#D97706;" id="stat-pending">2</div><div class="stat-label">En attente</div></div>
+            <div class="card stat-card"><div class="stat-value" style="color:var(--indigo);">12</div><div class="stat-label">Enseignants</div></div>
+            <div class="card stat-card"><div class="stat-value" style="color:#059669;">148</div><div class="stat-label">Élèves</div></div>
+            <div class="card stat-card"><div class="stat-value" style="color:#DC2626;">2</div><div class="stat-label">Signalements</div></div>
+          </div>
+
+          <p class="section-label">Demandes d'inscription</p>
+          <div class="card" style="padding:0;margin-bottom:28px;" id="enrollments-list">
+            <div class="list-row">
+              <div class="list-row-info">
+                <div class="list-row-name">Lucas D. → Mathématiques</div>
+                <div style="margin-top:6px;"><span class="pill pill-pending">en attente</span></div>
+              </div>
+              <div class="list-row-actions">
+                <button class="btn btn-emerald btn-sm" onclick="handleEnroll(this)"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg> Approuver</button>
+                <button class="btn btn-danger-ghost btn-sm" onclick="handleEnroll(this)"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg> Rejeter</button>
+              </div>
+            </div>
+            <div class="list-row">
+              <div class="list-row-info">
+                <div class="list-row-name">Amina K. → Physique-Chimie</div>
+                <div style="margin-top:6px;"><span class="pill pill-pending">en attente</span></div>
+              </div>
+              <div class="list-row-actions">
+                <button class="btn btn-emerald btn-sm" onclick="handleEnroll(this)"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg> Approuver</button>
+                <button class="btn btn-danger-ghost btn-sm" onclick="handleEnroll(this)"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg> Rejeter</button>
+              </div>
+            </div>
+          </div>
+
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
+            <p class="section-label" style="margin:0;">Comptes professeurs</p>
+            <button class="btn btn-outline-indigo btn-sm">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              Créer un compte
+            </button>
+          </div>
+          <div class="card" style="padding:0;margin-bottom:28px;">
+            <div class="list-row">
+              <div class="list-row-info" style="display:flex;align-items:center;gap:12px;">
+                <div class="avatar" style="background:#E0E7FF;color:#4338CA;">D</div>
+                <div>
+                  <div class="list-row-name">Prof. Dubois</div>
+                  <div class="list-row-sub">3 cours · il y a 2j</div>
+                </div>
+              </div>
+              <span class="pill pill-success">Actif</span>
+            </div>
+            <div class="list-row">
+              <div class="list-row-info" style="display:flex;align-items:center;gap:12px;">
+                <div class="avatar" style="background:#E0E7FF;color:#4338CA;">M</div>
+                <div>
+                  <div class="list-row-name">Prof. Martin</div>
+                  <div class="list-row-sub">2 cours · aujourd'hui</div>
+                </div>
+              </div>
+              <span class="pill pill-success">Actif</span>
+            </div>
+            <div class="list-row">
+              <div class="list-row-info" style="display:flex;align-items:center;gap:12px;">
+                <div class="avatar" style="background:#E0E7FF;color:#4338CA;">L</div>
+                <div>
+                  <div class="list-row-name">Prof. Lefèvre</div>
+                  <div class="list-row-sub">1 cours · il y a 5j</div>
+                </div>
+              </div>
+              <span class="pill pill-neutral">Inactif</span>
+            </div>
+          </div>
+
+          <p class="section-label">Signalements</p>
+          <div class="card" style="padding:0;margin-bottom:28px;">
+            <div class="list-row">
+              <div class="list-row-info">
+                <div class="list-row-name">Retard signalé <span style="font-weight:400;color:var(--muted);">— Emma L.</span></div>
+                <div style="display:flex;align-items:center;gap:8px;margin-top:6px;">
+                  <span class="pill pill-open">ouvert</span>
+                  <span style="font-size:12px;color:#9B9895;">Dim 12 jan</span>
+                </div>
+              </div>
+              <button class="btn btn-indigo btn-sm">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                Traiter
+              </button>
+            </div>
+            <div class="list-row">
+              <div class="list-row-info">
+                <div class="list-row-name">Absence non justifiée <span style="font-weight:400;color:var(--muted);">— Lucas D.</span></div>
+                <div style="display:flex;align-items:center;gap:8px;margin-top:6px;">
+                  <span class="pill pill-open">ouvert</span>
+                  <span style="font-size:12px;color:#9B9895;">Sam 11 jan</span>
+                </div>
+              </div>
+              <button class="btn btn-indigo btn-sm">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                Traiter
+              </button>
+            </div>
+          </div>
+
+          <p class="section-label">Messagerie</p>
+          <div class="card">
+            <div style="display:flex;flex-direction:column;gap:12px;">
+              <div class="field"><label>Destinataire</label><input class="input" placeholder="Nom, rôle ou groupe..." /></div>
+              <div class="field"><label>Objet</label><input class="input" placeholder="Objet du message..." /></div>
+              <div class="field"><label>Message</label><textarea class="msg-textarea" rows="4" placeholder="Votre message..."></textarea></div>
+            </div>
+            <button class="btn btn-primary" style="margin-top:16px;">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+              Envoyer
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+(function() {
+  let currentRole = 'student';
+  let currentChild = 0;
+
+  const roles = {
+    student: {
+      label: 'Élève',
+      name: 'Lucas Bernard',
+      sub: '3ème · Groupe A',
+      avatarBg: '#D1FAE5',
+      avatarColor: '#065F46',
+      navLabel: 'Mon agenda',
+      initials: 'LB',
+      icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>'
+    },
+    parent: {
+      label: 'Parent',
+      name: 'Sophie Bernard',
+      sub: '2 enfants inscrits',
+      avatarBg: '#EDE9FE',
+      avatarColor: '#5B21B6',
+      navLabel: 'Mes enfants',
+      initials: 'SB',
+      icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>'
+    },
+    teacher: {
+      label: 'Professeur',
+      name: 'Prof. Dubois',
+      sub: 'Mathématiques',
+      avatarBg: '#FEF3C7',
+      avatarColor: '#92400E',
+      navLabel: 'Mes cours',
+      initials: 'PD',
+      icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/></svg>'
+    },
+    admin: {
+      label: 'Administration',
+      name: 'M. Renard',
+      sub: 'Staff · Coordinateur',
+      avatarBg: '#FEE2E2',
+      avatarColor: '#991B1B',
+      navLabel: 'Tableau de bord',
+      initials: 'MR',
+      icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>'
+    }
+  };
+
+  const children = [
+    {
+      name: 'Lucas',
+      courses: [
+        { subject: 'Mathématiques', day: 'Sam 10:00', teacher: 'Prof. Dubois' },
+        { subject: 'Anglais', day: 'Dim 14:00', teacher: 'Prof. Martin' }
+      ],
+      attendance: ['present','present','late','present','absent'],
+      level: 'Confirmé',
+      note: 'Bon travail en algèbre. Des progrès notables en géométrie ce trimestre.'
+    },
+    {
+      name: 'Emma',
+      courses: [
+        { subject: 'Français', day: 'Sam 14:00', teacher: 'Prof. Petit' }
+      ],
+      attendance: ['present','present','present','present'],
+      level: 'Débutant+',
+      note: 'Très motivée, participation active en classe. Continue comme ça !'
+    }
+  ];
+
+  const navItems = {
+    student: ['Mon agenda', 'Notifications', 'Messages'],
+    parent: ['Mes enfants', 'Notifications', 'Messages'],
+    teacher: ['Mes cours', 'Notifications', 'Messages'],
+    admin: ['Tableau de bord', 'Notifications', 'Messages']
+  };
+
+  window.switchMode = function(mode, btn) {
+    document.getElementById('form-login').style.display = mode === 'login' ? 'block' : 'none';
+    document.getElementById('form-register').style.display = mode === 'register' ? 'block' : 'none';
+    btn.parentElement.querySelectorAll('button').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+  };
+
+  window.pickDemoRole = function(role, btn) {
+    currentRole = role;
+    btn.parentElement.querySelectorAll('button').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+  };
+
+  window.pickRegRole = function(role) {
+    const sBtn = document.getElementById('reg-role-student');
+    const pBtn = document.getElementById('reg-role-parent');
+    const dob = document.getElementById('reg-dob-field');
+    if (role === 'student') {
+      sBtn.style.borderColor = 'var(--indigo)'; sBtn.style.background = '#E0E7FF'; sBtn.style.color = 'var(--indigo)';
+      pBtn.style.borderColor = 'var(--border)'; pBtn.style.background = 'var(--bg)'; pBtn.style.color = 'var(--muted)';
+      dob.style.display = 'flex';
+    } else {
+      pBtn.style.borderColor = 'var(--indigo)'; pBtn.style.background = '#E0E7FF'; pBtn.style.color = 'var(--indigo)';
+      sBtn.style.borderColor = 'var(--border)'; sBtn.style.background = 'var(--bg)'; sBtn.style.color = 'var(--muted)';
+      dob.style.display = 'none';
+    }
+  };
+
+  window.doLogin = function() {
+    showApp(currentRole);
+  };
+
+  window.goToLogin = function() {
+    document.getElementById('screen-login').classList.add('active');
+    document.getElementById('screen-app').classList.remove('active');
+  };
+
+  window.switchRole = function(role) {
+    currentRole = role;
+    showApp(role);
+  };
+
+  window.switchChild = function(idx, btn) {
+    currentChild = idx;
+    btn.parentElement.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    renderParent();
+  };
+
+  window.handleEnroll = function(btn) {
+    const row = btn.closest('.list-row');
+    row.style.transition = 'opacity 0.3s';
+    row.style.opacity = '0';
+    setTimeout(() => {
+      row.remove();
+      const remaining = document.querySelectorAll('#enrollments-list .list-row').length;
+      document.getElementById('stat-pending').textContent = remaining;
+      if (remaining === 0) {
+        document.getElementById('enrollments-list').innerHTML = '<div class="empty-state"><div class="empty-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg></div><p style="font-size:14px;color:var(--muted);">Aucune demande en attente</p></div>';
+      }
+    }, 300);
+  };
+
+  function showApp(role) {
+    const r = roles[role];
+    document.getElementById('screen-login').classList.remove('active');
+    document.getElementById('screen-app').classList.add('active');
+
+    // Update sidebar
+    document.getElementById('sidebar-name').textContent = r.name;
+    document.getElementById('sidebar-sub').textContent = r.sub;
+    document.getElementById('sidebar-avatar').textContent = r.initials;
+    document.getElementById('sidebar-avatar').style.background = r.avatarBg;
+    document.getElementById('sidebar-avatar').style.color = r.avatarColor;
+    document.getElementById('topbar-avatar').textContent = r.initials;
+    document.getElementById('topbar-avatar').style.background = r.avatarBg;
+    document.getElementById('topbar-avatar').style.color = r.avatarColor;
+    document.getElementById('topbar-page').textContent = r.navLabel;
+
+    // Nav
+    const nav = document.getElementById('sidebar-nav');
+    nav.innerHTML = navItems[role].map((item, i) =>
+      '<button class="nav-item' + (i === 0 ? ' active' : '') + '">' + roles[role].icon + item + '</button>'
+    ).join('');
+
+    // Role switcher
+    const switcher = document.getElementById('sidebar-role-switch');
+    switcher.innerHTML = Object.keys(roles).filter(r2 => r2 !== role).map(r2 => {
+      const rInfo = roles[r2];
+      return '<button class="nav-item" onclick="switchRole(\'' + r2 + '\')">' + rInfo.icon + rInfo.label + '</button>';
+    }).join('');
+
+    // Panels
+    ['student','parent','teacher','admin'].forEach(p => {
+      document.getElementById('panel-' + p).style.display = p === role ? 'block' : 'none';
+    });
+
+    if (role === 'parent') renderParent();
+  }
+
+  function renderParent() {
+    const c = children[currentChild];
+
+    const agenda = document.getElementById('parent-agenda');
+    agenda.innerHTML = c.courses.map(co => `
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px;">
+        <div style="width:32px;height:32px;background:#E0E7FF;color:#4338CA;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg>
+        </div>
+        <div>
+          <div style="font-size:14px;font-weight:600;">${co.subject}</div>
+          <div style="font-size:12px;color:var(--muted);">${co.teacher} · ${co.day}</div>
+        </div>
+      </div>
+    `).join('');
+
+    const att = document.getElementById('parent-attendance');
+    att.innerHTML = '<div class="dot-row">' + c.attendance.map(a =>
+      '<div class="dot dot-' + a + '" title="' + (a === 'present' ? 'Présent' : a === 'absent' ? 'Absent' : 'Retard') + '"></div>'
+    ).join('') + '</div>';
+
+    document.getElementById('parent-level').innerHTML = '<span class="pill pill-info">Niveau : ' + c.level + '</span>';
+    document.getElementById('parent-note').textContent = c.note;
+  }
+
+  // Init parent panel
+  renderParent();
+})();
+</script>
+</body>
+</html>
