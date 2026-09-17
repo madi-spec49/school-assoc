@@ -1,8 +1,8 @@
-# Portfolio Project — Stage 3
+# Portfolio Project — Stage 4
 
 **Plateforme de cours à distance pour une association scolaire**
 
-MVP permettant d'organiser des cours à distance le week-end pour environ **100 élèves** et **10 professeurs**. Développé dans le cadre d'un projet Portfolio (Stage 3), livrable en 2 mois.
+MVP permettant d'organiser des cours à distance le week-end pour environ **100 élèves** et **10 professeurs**. Développé dans le cadre d'un projet Portfolio (Stage 3), livrable en 3 mois.
 
 ## Stack technique
 
